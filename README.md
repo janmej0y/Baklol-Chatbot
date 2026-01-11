@@ -6,7 +6,7 @@ A production-ready, responsive AI chatbot built with **Next.js 15**, **Tailwind 
 
 ## ✨ Features
 
-- **🧠 AI Intelligence:** Powered by Google's **Gemini 1.5 Flash** model for fast, accurate responses.
+- **🧠 AI Intelligence:** Powered by Google's **Gemini 2.5 Flash** model for fast, accurate responses.
 - **⚡ Real-time Chat:** Instant interaction with a clean, centered interface.
 - **🎨 Modern UI/UX:**
   - Fully responsive design (Mobile & Desktop).
