@@ -14,12 +14,30 @@ interface Message {
   content: string;
 }
 
-// Updated to accept initialMessages (History from MongoDB)
-export default function ChatInterface({ user, initialMessages = [] }: { user: any, initialMessages?: Message[] }) {
+// Updated props to include initialLimitReached
+export default function ChatInterface({ 
+  user, 
+  initialMessages = [], 
+  initialLimitReached = false 
+}: { 
+  user: any, 
+  initialMessages?: Message[], 
+  initialLimitReached?: boolean 
+}) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [isLimitReached, setIsLimitReached] = useState(initialLimitReached); // State for blocking
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Theme hydration fix
+  const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Fix hydration mismatch for theme
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const suggestions = [
     { icon: <Terminal size={18} />, text: "Write a React component" },
@@ -47,8 +65,15 @@ export default function ChatInterface({ user, initialMessages = [] }: { user: an
         body: JSON.stringify({ messages: newMessages }),
       });
 
+      const data = await response.json(); // Read JSON first to check for flags
+
       if (!response.ok) throw new Error("Failed to fetch");
-      const data = await response.json();
+
+      // 🔴 CHECK IF BACKEND SAYS LIMIT REACHED
+      if (data.limitReached) {
+        setIsLimitReached(true);
+      }
+
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.content },
@@ -109,7 +134,12 @@ export default function ChatInterface({ user, initialMessages = [] }: { user: an
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full text-zinc-500"
           >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {/* Safe theme rendering */}
+            {mounted ? (
+              theme === "dark" ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />
+            ) : (
+               <div className="w-5 h-5" />
+            )}
           </button>
         </div>
       </header>
@@ -174,7 +204,12 @@ export default function ChatInterface({ user, initialMessages = [] }: { user: an
 
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent dark:from-zinc-950 dark:via-zinc-950 pb-6 z-20">
-        <ChatInput onSend={handleSend} isLoading={isLoading} />
+        {/* Pass the disabled prop here */}
+        <ChatInput 
+          onSend={handleSend} 
+          isLoading={isLoading} 
+          disabled={isLimitReached} 
+        />
       </footer>
     </div>
   );

@@ -5,11 +5,20 @@ const ChatSchema = new Schema(
     userEmail: {
       type: String,
       required: true,
-      unique: true, // One document per user (stores all their history)
+      unique: true,
+    },
+    // New fields for Rate Limiting
+    usageCount: { 
+      type: Number, 
+      default: 0 
+    },
+    cycleStartDate: { 
+      type: Date, 
+      default: Date.now 
     },
     messages: [
       {
-        role: { type: String, required: true }, // "user" or "assistant"
+        role: { type: String, required: true },
         content: { type: String, required: true },
       },
     ],

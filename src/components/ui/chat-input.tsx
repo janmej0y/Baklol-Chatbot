@@ -7,9 +7,10 @@ import { useState, KeyboardEvent } from "react";
 interface ChatInputProps {
   onSend: (message: string) => void;
   isLoading: boolean;
+  disabled?: boolean; // Add this property
 }
 
-export function ChatInput({ onSend, isLoading }: ChatInputProps) {
+export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
   const [input, setInput] = useState("");
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -36,6 +37,7 @@ export function ChatInput({ onSend, isLoading }: ChatInputProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={disabled} // Pass the disabled prop to the input element
         />
         <button
           onClick={handleSubmit}
