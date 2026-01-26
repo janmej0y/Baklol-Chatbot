@@ -4,7 +4,7 @@ import Chat from "@/models/Chat";
 import { auth } from "@/auth";
 import { runGemini } from "@/lib/gemini";
 
-const MAX_MESSAGES = 10;
+const MAX_MESSAGES = 5;
 const CYCLE_DAYS = 28;
 
 export async function POST(req: Request) {
