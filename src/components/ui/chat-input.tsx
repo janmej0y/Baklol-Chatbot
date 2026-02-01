@@ -48,7 +48,7 @@ export function ChatInput({ onSend, isLoading, disabled }: ChatInputProps) {
         </button>
       </div>
       <p className="text-center text-xs text-zinc-400 mt-2">
-        Baklol can make mistakes. Consider checking important information.
+        Kurmi can make mistakes. Consider checking important information.
       </p>
     </div>
   );
