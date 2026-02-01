@@ -49,7 +49,7 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       <div className="flex-1 overflow-hidden">
         <div className="flex items-center justify-between mb-1">
           <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">
-            {isAI ? "Baklol" : "You"}
+            {isAI ? "Kurmi" : "You"}
           </span>
           {isAI && (
             <button
